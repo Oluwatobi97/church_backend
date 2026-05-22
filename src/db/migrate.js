@@ -1,5 +1,5 @@
-import pool from '../config/database.js';
-import dotenv from 'dotenv';
+import pool from "../config/database.js";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -7,7 +7,7 @@ const createTables = async () => {
   const client = await pool.connect();
 
   try {
-    console.log('Creating tables...');
+    console.log("Creating tables...");
 
     // Users table
     await client.query(`
@@ -21,7 +21,7 @@ const createTables = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log('✅ Users table created');
+    console.log("✅ Users table created");
 
     // Devotions table
     await client.query(`
@@ -35,7 +35,7 @@ const createTables = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log('✅ Devotions table created');
+    console.log("✅ Devotions table created");
 
     // Announcements table
     await client.query(`
@@ -49,7 +49,7 @@ const createTables = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log('✅ Announcements table created');
+    console.log("✅ Announcements table created");
 
     // Attendance table
     await client.query(`
@@ -69,7 +69,7 @@ const createTables = async () => {
         UNIQUE(day, week_starting)
       );
     `);
-    console.log('✅ Attendance table created');
+    console.log("✅ Attendance table created");
 
     // Timetable table
     await client.query(`
@@ -86,7 +86,7 @@ const createTables = async () => {
         UNIQUE(week_number, day, month, year)
       );
     `);
-    console.log('✅ Timetable table created');
+    console.log("✅ Timetable table created");
 
     // Finance Income table
     await client.query(`
@@ -100,7 +100,7 @@ const createTables = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log('✅ Finance Income table created');
+    console.log("✅ Finance Income table created");
 
     // Finance Expenses table
     await client.query(`
@@ -111,10 +111,11 @@ const createTables = async () => {
         week_starting DATE NOT NULL,
         created_by INTEGER NOT NULL REFERENCES users(id),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(category, week_starting)
       );
     `);
-    console.log('✅ Finance Expenses table created');
+    console.log("✅ Finance Expenses table created");
 
     // Finance Balance table
     await client.query(`
@@ -127,7 +128,7 @@ const createTables = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log('✅ Finance Balance table created');
+    console.log("✅ Finance Balance table created");
 
     // Create indexes for faster queries
     await client.query(`
@@ -138,12 +139,12 @@ const createTables = async () => {
       CREATE INDEX IF NOT EXISTS idx_finance_income_week ON finance_income(week_starting);
       CREATE INDEX IF NOT EXISTS idx_finance_expenses_week ON finance_expenses(week_starting);
     `);
-    console.log('✅ Indexes created');
+    console.log("✅ Indexes created");
 
-    console.log('\n✅ Database migration completed successfully!');
+    console.log("\n✅ Database migration completed successfully!");
     process.exit(0);
   } catch (error) {
-    console.error('❌ Migration error:', error.message);
+    console.error("❌ Migration error:", error.message);
     process.exit(1);
   } finally {
     client.release();
