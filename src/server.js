@@ -17,7 +17,10 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://church-app.onrender.com"],
+    origin: [
+      "http://localhost:5173",
+      "https://church-website-k5rp.onrender.com",
+    ],
     credentials: true,
   }),
 );
